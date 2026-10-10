@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SHOES adapts legged robots to new footwear with lightweight, behavior-preserving policy modules and workspace-aware online learning.">
+  <meta name="theme-color" content="#ffffff">
+  <title>SHOES: Sim-to-real Hardware-adaptation via On-policy Expansion of Skills for Legged Robots</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23252523'/%3E%3Cpath d='M13 38h13l5-17h10l2 15 10 6v9H13z' fill='%23d5ec63'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="wordmark" href="#" aria-label="SHOES home">SHOES<span class="brand-dot"></span></a>
+    <nav aria-label="Main navigation">
+      <a href="#overview">Abstract</a><a href="#method">Method</a><a href="#results">Results</a><a class="nav-paper" href="assets/shoes-paper.pdf">Paper <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero container" aria-labelledby="title">
+      <h1 id="title"><span class="title-name">SHOES:</span> Sim-to-real Hardware-adaptation via<br>On-policy Expansion of Skills for Legged Robots</h1>
+      <div class="authors" aria-label="Authors">
+        <span>Kota Tsuruhara<sup>1,2</sup></span>
+        <span><a href="https://scholar.google.com/citations?user=n30W608AAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Tsung-Yuan Chen</a><sup>2</sup></span>
+        <span><a href="https://haraduka.github.io/" target="_blank" rel="noopener noreferrer">Kento Kawaharazuka</a><sup>2</sup></span>
+      </div>
+      <div class="affiliations" aria-label="Affiliations">
+        <span><sup>1</sup> Tokyo University of Agriculture and Technology</span>
+        <span><sup>2</sup> The University of Tokyo</span>
+      </div>
+      <p class="acceptance-badge">Accepted at CoRL 2026</p>
+      <div class="actions">
+        <a class="button primary" href="assets/shoes-paper.pdf">Paper <span aria-hidden="true">↗</span></a>
+        <a class="button secondary" href="#paper-video">Video <span aria-hidden="true">▶</span></a>
+      </div>
+    </section>
+    <section class="section container abstract-section" id="overview" aria-labelledby="abstract-title">
+      <div class="abstract-copy">
+      <h2 id="abstract-title">Abstract</h2>
+      <div class="abstract-text"><p>Humans expand their locomotion capability by wearing appropriate footwear, such as hiking boots for mountains or skates for ice. Footwear changes the ground-contact interface and enables traversal of otherwise difficult terrain. In contrast, locomotion controllers are typically trained for a fixed morphology, and their performance can degrade when shoes alter foot geometry, mass, and friction. We propose <strong>SHOES</strong>, a sample-efficient framework for adapting locomotion policies to footwear-induced morphology changes. SHOES freezes a simulation-trained nominal policy and fine-tunes only lightweight, identity-initialized modulation modules on the robot, preserving the initial behavior while enabling efficient hardware adaptation. We also introduce <strong>SafeBox</strong>, a workspace-aware waypoint sampler that constrains online adaptation within a user-defined workspace. The simulation results with a shoe-equipped Unitree Go2 show that SHOES substantially recovers locomotion performance after footwear-induced morphology changes using limited additional adaptation. Under the same adaptation budget, SHOES outperforms FiLM-only, Linear Adapter-only, and residual-RL baselines. Real-world experiments on a Unitree Go2 fitted with human shoes further evaluate the effectiveness of SHOES for hardware deployment.</p></div>
+      </div>
+      <figure class="abstract-teaser"><img src="assets/teaser.webp" width="1600" height="1123" alt="A Unitree Go2 wearing blue and yellow shoes on a tree-lined walkway" fetchpriority="high"></figure>
+    </section>
+    <section class="metrics container" aria-label="Key results and adaptation budget">
+      <div><span class="metric-number">93.5<span>%</span></span><p>Bare-Foot Parity after adaptation</p><small>± 3.9% · flat shoes · six seeds</small></div>
+      <div><span class="metric-number">5.6<span>k</span></span><p>Trainable adaptation parameters</p></div>
+      <div><span class="metric-number">10<span> min</span></span><p>Robot interaction for adaptation</p></div>
+    </section>
+    <section class="container paper-video-section" id="paper-video" aria-labelledby="paper-video-title">
+      <h2 id="paper-video-title">Video Overview</h2>
+      <figure class="safebox-video">
+        <video controls playsinline preload="none" poster="assets/paper-video-poster.webp" width="1920" height="1080" aria-label="SHOES paper introduction video">
+          <source src="assets/SHOES.mp4" type="video/mp4">
+          Your browser does not support embedded video. <a href="assets/SHOES.mp4">Download the paper video.</a>
+        </video>
+      </figure>
+    </section>
+    <section class="section container overview" id="idea" aria-labelledby="idea-title">
+      <div><h2 id="idea-title"><strong>New shoes.<br>New possibilities.</strong></h2></div>
+      <div class="prose">
+        <p class="lead">People change shoes to go further. Robots need to adapt their control, too.</p>
+        <p>Shoes change contact geometry, mass, friction, and the effective shape of a robot’s legs. A controller trained for bare feet can lose much of its tracking performance when shoes are attached.</p>
+        <p>Footwear-aware domain randomization requires defining the range of shoe-induced contact changes in advance. <strong>SHOES adapts after the shoes are attached, using reinforcement learning directly on the real robot</strong>—without requiring a predefined randomization distribution for the new footwear. It is complementary to domain randomization and can also adapt a DR-trained policy.</p>
+        <p>SHOES preserves the simulation-trained policy and learns only small, identity-initialized adaptation modules. Together with <strong>SafeBox</strong>, a workspace-aware waypoint sampler, this enables efficient online adaptation on a shoe-equipped Unitree Go2.</p>
+      </div>
+    </section>
+    <section class="method-section" id="method"><div class="container section">
+      <div class="section-heading"><div><h2>Method</h2></div></div>
+      <div class="stages"><article><span class="stage-label">STAGE 01 · SIMULATION</span><h3>Learn to walk barefoot.</h3><p>First, train the bare-foot robot to follow velocity commands in simulation using PPO. This nominal policy provides the basic walking skills that will be reused when the robot wears new footwear.</p></article><article><span class="stage-label">STAGE 02 · ONLINE ADAPTATION</span><h3>Put on shoes. Adapt.</h3><p>After attaching shoes, keep the nominal policy fixed and train only the small FiLM and Linear Adapter modules with PPO on the robot. These modules learn to compensate for the changed contact dynamics, with velocity tracking as the adaptation objective.</p></article></div>
+      <figure class="paper-figure architecture"><a href="assets/architecture.webp" target="_blank" rel="noopener" aria-label="Open the full training architecture figure"><img src="assets/architecture.webp" loading="lazy" alt="SHOES architecture: simulation-trained nominal policy followed by online training of FiLM and Linear Adapter modules around the frozen actor"></a><figcaption>SHOES trains lightweight adaptation modules around a frozen nominal policy.</figcaption></figure>
+      <div class="principles"><article><h3>Bounded FiLM</h3><p>FiLM uses the robot’s current observations to adjust the scale and offset of the policy’s internal features. This makes the correction depend on the robot’s state, while bounds limit how much those features can change.</p></article><article><h3>Linear Adapter</h3><p>The Linear Adapter applies a learned linear transformation and offset to the policy’s action output. It captures consistent corrections, such as a leg-height bias caused by footwear, while FiLM handles changes that depend on the robot’s state.</p></article><article><h3>Identity at initialization</h3><p>Both modules initially leave their inputs unchanged, so adding them preserves the nominal actor’s output exactly. Adaptation therefore starts from the existing walking behavior, and PPO gradually learns the corrections needed for the new shoes.</p></article></div>
+      <aside class="safebox"><div><h3>SafeBox: workspace-aware exploration.</h3><p>During online learning, randomly chosen velocity commands can carry the robot outside the available training area. SafeBox instead samples a target point inside a user-defined workspace and continuously updates the velocity command to guide the robot toward it. The commanded speed decreases near the target, and a new target is selected when the robot arrives or a timer expires. This lets the robot explore different motions while reducing drift away from the workspace.</p></div></aside>
+      <figure class="safebox-video">
+        <video controls playsinline preload="none" poster="assets/safebox-poster-1080p.webp" width="1920" height="1080" aria-label="SHOES online training in simulation with SafeBox workspace and waypoints visualized">
+          <source src="assets/safebox-training-1080p.mp4" type="video/mp4">
+          Your browser does not support embedded video. <a href="assets/safebox-training-1080p.mp4">Download the training video.</a>
+        </video>
+      </figure>
+    </div></section>
+    <section class="section container" id="results">
+      <div class="section-heading"><div><h2>Simulation Results</h2></div><p>Evaluated across 3 speeds × 8 directions.<br>Same 30k-step adaptation budget.</p></div>
+      <div class="results-grid"><div><h3>Two modules work better together.</h3><p class="muted">Bare-Foot Parity (BFP) on flat shoes</p><div class="bar-chart" aria-label="Flat-shoe component ablation: no adaptation 67.0%, Linear Adapter 65.1 plus or minus 8.9%, FiLM 78.7 plus or minus 10.8%, SHOES 93.5 plus or minus 3.9%">
+      <div class="bar-row"><div><span>No adaptation</span><strong>67.0%</strong></div><span class="track"><span style="width:67%"></span></span></div>
+      <div class="bar-row"><div><span>Linear Adapter only</span><strong>65.1 <small>± 8.9%</small></strong></div><span class="track"><span style="width:65.1%"></span></span></div>
+      <div class="bar-row"><div><span>FiLM only</span><strong>78.7 <small>± 10.8%</small></strong></div><span class="track"><span style="width:78.7%"></span></span></div>
+      <div class="bar-row ours"><div><span>SHOES <small>FiLM + Adapter</small></span><strong>93.5 <small>± 3.9%</small></strong></div><span class="track"><span style="width:93.5%"></span></span></div></div><p class="chart-note">Mean ± standard deviation over six seeds. BFP measures commanded-direction velocity relative to the bare-foot reference (100%).</p></div><div class="result-callout"><strong>+26.5<span>pp</span></strong><p>Gain in Bare-Foot Parity<br>over the no-adaptation nominal.</p></div></div>
+      <figure class="paper-figure radar"><a href="assets/film-adapter.webp" target="_blank" rel="noopener" aria-label="Open the velocity tracking figure"><img src="assets/film-adapter.webp" alt="Directional velocity tracking at 0.3, 0.6, and 1.0 meters per second, comparing SHOES, bare-foot nominal, and nominal with shoes" loading="lazy"></a><figcaption>Directional velocity tracking across three speeds (best SHOES seed).</figcaption></figure>
+      <div class="footwear-heading"><h3>Different shoes. The same adaptation interface.</h3></div>
+      <div class="footwear-picker" role="group" aria-label="Select simulated footwear"><button type="button" data-shoe="curve" aria-pressed="true">Curve Foot</button><button type="button" data-shoe="single_geta" aria-pressed="false">Single Geta</button><button type="button" data-shoe="double_geta" aria-pressed="false">Double Geta</button><button type="button" data-shoe="skate" aria-pressed="false">Skates</button></div>
+      <div class="footwear-detail"><img id="shoe-image" src="assets/curve.webp" alt="Simulated curved footwear on the robot’s feet" loading="lazy"><div id="shoe-result" aria-live="polite" aria-atomic="true"><h3 id="shoe-name">Curve Foot</h3><div class="shoe-scores"><div><span>Without adaptation</span><strong id="shoe-before">36.4%</strong></div><span class="score-arrow" aria-hidden="true">→</span><div><span>With SHOES</span><strong id="shoe-after">115.0 <small>± 5.8%</small></strong></div></div><p class="chart-note">Bare-Foot Parity after 30k steps; 100% is the bare-foot reference.</p></div></div>
+      <noscript><p>Footwear results (nominal → SHOES BFP): Curve Foot 36.4% → 115.0 ± 5.8%; Single Geta 36.8% → 113.5 ± 6.5%; Double Geta 17.7% → 103.6 ± 12.7%; Skates 38.6% → 97.2 ± 5.1%.</p></noscript>
+    </section>
+    <section class="hardware-section" id="hardware"><div class="section container">
+      <div class="section-heading"><div><h2>Real-Robot Experiments</h2></div></div>
+      <figure class="safebox-video real-training-video">
+        <video controls playsinline preload="none" poster="assets/real-training-poster.webp" width="1920" height="1080" aria-label="Real Unitree Go2 learning to walk with shoes, shown at five times speed" aria-describedby="real-training-caption">
+          <source src="assets/SHOES_real_5x.mp4" type="video/mp4">
+          Your browser does not support embedded video. <a href="assets/SHOES_real_5x.mp4">Download the real-robot training video.</a>
+        </video>
+        <figcaption id="real-training-caption">On-robot adaptation (5× speed).</figcaption>
+      </figure>
+      <div class="hardware-grid"><div><h3>Recovering backward walking.</h3><p>At a −0.30 m/s backward command, the nominal policy with shoes tracks at approximately −0.10 m/s. After adaptation, SHOES reaches approximately −0.25 m/s.</p><div class="hardware-stat"><strong>75<span>%</span></strong><p>lower steady-state tracking error<br><span>0.20 → 0.05 m/s in this backward test</span></p></div></div><figure class="paper-figure"><img src="assets/velocity.webp" loading="lazy" alt="Real robot backward velocity comparison: SHOES tracks closer to the negative 0.30 meters per second command than either nominal baseline"><figcaption>Backward velocity tracking on the real robot.</figcaption></figure></div>
+      <figure class="traversal"><a href="assets/real-experiment.webp" target="_blank" rel="noopener" aria-label="Open slotted-surface experiment photos"><img src="assets/real-experiment.webp" loading="lazy" alt="Four sequential images show the shoe-equipped robot crossing a slotted surface in the top row; without shoes, a foot becomes trapped in the bottom row"></a><figcaption><strong>Footwear opens up new terrain.</strong><span>On a slotted surface, the shoe-equipped robot crosses the openings; without shoes, a foot drops into a slot and the robot becomes trapped.</span></figcaption></figure>
+    </div></section>
+    <section class="section container citation-section" id="citation"><div><h2>Paper &amp; Citation</h2><p>Read the paper for the full method and experimental results.</p><a class="button primary" href="assets/shoes-paper.pdf">Download paper <span aria-hidden="true">↓</span></a></div><div class="citation-box"><div class="citation-heading"><span>BIBTEX</span><button type="button" id="copy-citation">Copy citation</button></div><pre id="bibtex">@inproceedings{tsuruhara2026shoes,
+  title = {SHOES: Sim-to-real Hardware-adaptation
+    via On-policy Expansion of Skills
+    for Legged Robots},
+  author = {Tsuruhara, Kota and Chen, Tsung-Yuan
+    and Kawaharazuka, Kento},
+  booktitle = {Conference on Robot Learning (CoRL)},
+  year = {2026}
+}</pre><p id="copy-status" class="copy-status" role="status"></p></div></section>
+  </main>
+  <footer class="container"><a class="wordmark" href="#">SHOES<span class="brand-dot"></span></a><p>Sim-to-real hardware adaptation for legged robots.</p><a class="text-link" href="#main">Back to top ↑</a></footer>
+</body>
+</html>
