@@ -14,12 +14,9 @@ This repository hosts the source of the project page.
 
 ```bibtex
 @inproceedings{tsuruhara2026shoes,
-  title = {SHOES: Sim-to-real Hardware-adaptation
-    via On-policy Expansion of Skills
-    for Legged Robots},
-  author = {Tsuruhara, Kota and Chen, Tsung-Yuan
-    and Kawaharazuka, Kento},
+  title     = {SHOES: Sim-to-real Hardware-adaptation via On-policy Expansion of Skills for Legged Robots},
+  author    = {Tsuruhara, Kota and Chen, Tsung-Yuan and Kawaharazuka, Kento},
   booktitle = {Conference on Robot Learning (CoRL)},
-  year = {2026}
+  year      = {2026}
 }
 ```
