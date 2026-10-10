@@ -7,6 +7,7 @@ Accepted at the Conference on Robot Learning (CoRL) 2026.
 **Project page: https://trhrobo.github.io/SHOES/**
 
 - [Paper (PDF)](https://trhrobo.github.io/SHOES/assets/shoes-paper.pdf)
+- [Video (YouTube)](https://youtu.be/OTEKMQmsNl4)
 
 This repository hosts the source of the project page.
 
