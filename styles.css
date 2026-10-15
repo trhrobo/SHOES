@@ -57,3 +57,6 @@
 
 
 #idea-title strong{font-weight:700}
+
+/* Header link buttons with a leading logo (PDF, arXiv, YouTube). */
+.icon-button{gap:10px}.button-icon{width:20px;height:20px;flex:none}
